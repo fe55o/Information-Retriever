@@ -3,10 +3,10 @@ import json
 
 # [[token, pag_id, pos]]
 data = [
-    ["hesham", 1, 1],
-    ["ahmed", 2, 1],
+    ["hesham", 2, 3],
+    ["ahmed", 1, 2],
     ["hesham", 2, 1],
-    ["hesham", 1, 4],
+    ["ham", 1, 1],
     ["hesham", 1, 5],
 ]
 
@@ -17,16 +17,16 @@ def sortData(data):
     return data
 
 
-# { "item" : { doc_id : [pos_id] },  }
-def add_value_in_dict(dict, key, doc_id, term_pos):
-    if len(key) == 0:
+# { "term" : { doc_id : [pos_id] },  }
+def add_value_in_dict(dict, term, doc_id, term_pos):
+    if len(term) == 0:
         return
-    if key not in dict:
-        dict[key] = {}
-    if doc_id not in dict[key]:
-        (dict[key])[doc_id] = []
-    if term_pos not in (dict[key])[doc_id]:
-        (dict[key])[doc_id].append(term_pos)
+    if term not in dict:
+        dict[term] = {}
+    if doc_id not in dict[term]:
+        (dict[term])[doc_id] = []
+    if term_pos not in (dict[term])[doc_id]:
+        (dict[term])[doc_id].append(term_pos)
     return dict
 
 
@@ -50,7 +50,7 @@ def run(data):
     indexing_table = createIndexingTable(data)
     saveOnDisk(indexing_table)
     print(indexing_table)
-    print("Term frequency: ", len(indexing_table["hesham"]))
+    print("Doc frequency: ", len(indexing_table["hesham"]))
 
 
 run(data)

@@ -1,21 +1,9 @@
 # BNF grammer is
-# stmt -> ( stmt op stmt ) | " term "
+# stmt -> ( stmt op stmt ) |  " term " | ' term '
 # op -> and | or
-
-
 stack = []
 qr = None
-ptr = 0
-
-
-def checkSyntax(query):
-    global qr, ptr, stack
-    if len(query) == 0:
-        return
-    qr = prepareQr(query)
-    stack = prepareStack()
-    while len(stack) > 0:
-        match()
+ptr = None
 
 
 def match():
@@ -30,11 +18,16 @@ def match():
     # top of stack is "term"
     elif stack[len(stack) - 1] == "term":
         stack.pop()
+        qr[ptr] = (qr[ptr], "term")
         ptr += 1
     # non_terminal or error
     else:
         function_name = stack.pop()
-        eval(function_name + "()")
+        try:
+            eval(function_name + "()")
+        except:
+            print(function_name)
+            raiseException(function_name)
 
 
 def stmt():
@@ -45,10 +38,10 @@ def stmt():
         stack.append("op")
         stack.append("stmt")
         stack.append("(")
-    elif qr[ptr] == '"':
-        stack.append('"')
+    elif qr[ptr] == '"' or qr[ptr] == "'":
+        stack.append(qr[ptr])
         stack.append("term")
-        stack.append('"')
+        stack.append(qr[ptr])
     else:
         raiseException(qr[ptr])
 
@@ -78,4 +71,27 @@ def prepareStack():
 
 def prepareQr(query):
     query = "( " + query + " )" + " $"
+    query = query.split()
     return query
+
+
+def checkSyntax(query):
+    global qr, ptr, stack
+    if len(query) == 0:
+        return
+    qr = prepareQr(query)
+    ptr = 0
+    stack = prepareStack()
+    while len(stack) > 0:
+        match()
+    return qr
+
+
+def run(query):
+    query = checkSyntax(query)
+    result = []
+    for token in query:
+        if token != "'" and token != '"' and token != "$":
+            result.append(token)
+    print(result)
+    return result
