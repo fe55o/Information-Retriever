@@ -1,14 +1,15 @@
 from operator import itemgetter
 import json
 
-# [[token, pag_id, pos]]
-data = [
-    ["hesham", 2, 3],
-    ["ahmed", 1, 2],
-    ["hesham", 2, 1],
-    ["ham", 1, 1],
-    ["hesham", 1, 5],
-]
+# # [[token, pag_id, pos]]
+# data = [
+#     ["ham", 2, 3],
+#     ["ahmed", 1, 2],
+#     ["hesham", 2, 2],
+#     ["ham", 1, 1],
+#     ["hesham", 1, 5],
+# ]
+
 
 # sort by term then docID then position
 def sortData(data):
@@ -39,18 +40,17 @@ def createIndexingTable(data):
     return indexing_tabel
 
 
-def saveOnDisk(indexing_table):
-    file = open("C:/Users/hesha/Desktop/Information-Retriever/data/table.json", "w")
+def saveOnDisk(path, indexing_table):
+    file = open(path, "w")
     json.dump(indexing_table, file)
     file.close
 
 
-def run(data):
+def run(path, data):
     data = sortData(data)
     indexing_table = createIndexingTable(data)
-    saveOnDisk(indexing_table)
-    print(indexing_table)
-    print("Doc frequency: ", len(indexing_table["hesham"]))
+    saveOnDisk(path, indexing_table)
+    # print(indexing_table)
 
 
-run(data)
+# srun("data/auxiliary table.json", data)

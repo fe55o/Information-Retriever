@@ -4,13 +4,6 @@ import math
 Dictionary = {}
 
 
-def loadDictionary(path):
-    global Dictionary
-    with open(path, "r") as fp:
-        Dictionary = json.load(fp)
-    return Dictionary
-
-
 def skip(index, sqrt, size):
     result = index + sqrt
     if result < size:
@@ -75,20 +68,25 @@ def mergeTwoDictionaries(dic1, dic2):
 
 # get matched Doc_id in one dictionary for all terms in query
 # time = -> terms ((size(dic1) (size(dic1[key] + size(dic2[key])))
-def getQueryDictionary(query):
-    query_dic = Dictionary[query[0]]
-    for token in query[1:]:
+def searchForQuery(list_query):
+    query_dic = Dictionary[list_query[0]]
+    for token in list_query[1:]:
         query_dic = mergeTwoDictionaries(query_dic, Dictionary[token])
     return query_dic
 
 
-def run(query):
+def run(dictionary, list_query):
     global Dictionary
-    path = "data/table.json"
-    Dictionary = loadDictionary(path)
-    print(getQueryDictionary(["ham", "hesham", "ahmed"]))
+    Dictionary = dictionary
+    return searchForQuery(list_query)
 
 
-# print(match([1, 2, 8, 11, 21], [,5, 6, 7]))
-
-run("")
+# print(
+#     run(
+#         {
+#             "ahmed": {"1": [2], "2": [1]},
+#             "hesham": {"1": [3], "2": [2]},
+#         },
+#         ["ahmed", "hesham"],
+#     )
+# )
