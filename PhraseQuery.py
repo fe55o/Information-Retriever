@@ -36,7 +36,7 @@ def match(ls1, ls2):
                     i += 1
         else:
             skip_j = skip(j, sqrt_j, m)
-            print(skip_j)
+            # print(skip_j)
             if ls2[skip_j] - ls1[i] == 1:  # ls2[skip_j] == ls1[i]:
                 j = skip_j
             else:
@@ -75,10 +75,13 @@ def searchForQuery(list_query):
     return query_dic
 
 
-def run(dictionary, list_query):
-    global Dictionary
-    Dictionary = dictionary
-    return searchForQuery(list_query)
+def phraseQuery(dictionary, list_query):
+    try:
+        global Dictionary
+        Dictionary = dictionary
+        return searchForQuery(list_query)
+    except:
+        return {}
 
 
 # print(

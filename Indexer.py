@@ -46,7 +46,7 @@ def saveOnDisk(path, indexing_table):
     file.close
 
 
-def run(path, data):
+def indexer(path, data):
     data = sortData(data)
     indexing_table = createIndexingTable(data)
     saveOnDisk(path, indexing_table)
