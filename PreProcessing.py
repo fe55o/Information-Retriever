@@ -2,7 +2,8 @@ from nltk.corpus import stopwords
 import nltk
 import string
 
-
+# input
+# [[file1], [file2], [file3]]
 def removePunc(files):
     for i in range(len(files)):
         files[i] = files[i].translate(
@@ -11,12 +12,16 @@ def removePunc(files):
     return files
 
 
+# input
+# [[file1], [file2], [file3]]
 def tokenization(files):
     for i in range(len(files)):
         files[i] = nltk.word_tokenize(files[i])
     return files
 
 
+# input
+# [[term1,term2,term3]]
 def givePositions(files):
     i = 0
     j = 0
@@ -29,6 +34,8 @@ def givePositions(files):
     return files
 
 
+# input
+# [[token1,token2,token3]]
 def normalize(files):
     stop_words = stopwords.words("english")
     for i in range(len(files)):
@@ -42,6 +49,10 @@ def normalize(files):
     return files
 
 
+# input
+# [[[term1, pos],[term1, pos],[term1, pos],[term1, pos],[term1, pos]]]
+# output
+# [[term1, doc_id, pos],[term2, doc_id, pos],[term3, doc_id, pos]
 def flatten(files):
     result = []
     doc_id = 0
