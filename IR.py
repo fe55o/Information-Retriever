@@ -1,3 +1,4 @@
+from os import terminal_size
 from ReadFiles import readFiles
 from PreProcessing import preProcessing
 from Indexer import indexer
@@ -5,6 +6,7 @@ from PhraseQuery import phraseQuery
 from QueryPreProcessing import prepareQuery
 import json
 import time
+import math
 
 auxiliary_table = {}
 
@@ -49,6 +51,24 @@ def getTermFreq(table):
     return sum
 
 
+def printResult(query, result, time, df, tf, idf):
+    print(
+        "-------------------------------------------------------------------------------------------------------------------------------------------------"
+    )
+    print(query, "in", df, "documents", "with", tf, "times")
+    print(
+        "------------------------------------------------------------------------------------------------------------------------------------------------- \n"
+    )
+    printTable(result)
+
+    print("idf : ", idf)
+    print("Time taken is: ", time)
+
+
+def calcIDF(total_num_of_doc, df):
+    return math.log(total_num_of_doc / df, 10)
+
+
 def main():
     global auxiliary_table
     query = readQueryFromUser()
@@ -84,10 +104,11 @@ def main():
     result = phraseQuery(auxiliary_table, list_query)
     end = time.time()
 
-    print(query, "in", len(result), "documents", "with", getTermFreq(result), "times")
-    printTable(result)
+    term_frequency = getTermFreq(result)
+    doc_frequency = len(result)
+    idf = calcIDF(10, doc_frequency)
 
-    print("Time taken is: ", (end - start))
+    printResult(query, result, end - start, doc_frequency, term_frequency, idf)
 
 
 if __name__ == "__main__":
