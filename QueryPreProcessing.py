@@ -28,8 +28,8 @@ def normalize(list_query):
     stop_words = stopwords.words("english")
     for i in range(len(list_query)):
         token = list_query[i]
+        token = token.lower()
         if token not in stop_words and token.isalpha():
-            token = token.lower()
             result.append(token)
     return result
 

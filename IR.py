@@ -1,10 +1,12 @@
 from ReadFiles import readFiles
-from PreProcessing1 import preProcessing
+from PreProcessing import preProcessing
 from Indexer import indexer
 from PhraseQuery import phraseQuery
 from QueryPreProcessing import prepareQuery
 import json
 import time
+
+auxiliary_table = {}
 
 
 def saveOnDisk(path, data):
@@ -21,20 +23,44 @@ def loadFromDisk(path):
 
 
 def readQueryFromUser():
-    query = input()
+    query = input("Enter your query :")
     return query
 
 
+def getTableForTerms(list_query):
+    try:
+        global auxiliary_table
+        for item in list_query:
+            result = auxiliary_table[item]
+            print(item, ":", result, "\n")
+    except:
+        return
+
+
+def printTable(table):
+    for key in table:
+        print(key + ":", table[key], "\n")
+
+
+def getTermFreq(table):
+    sum = 0
+    for key in table:
+        sum += len(table[key])
+    return sum
+
+
 def main():
+    global auxiliary_table
     query = readQueryFromUser()
-    query = prepareQuery(query)
-    if query == False:
+
+    # prepare query, stop words removal, normalization, ...etc
+    list_query = prepareQuery(query)
+    if list_query == False:
         print("Wrong syntax!!")
         return
 
-    list_query = query
-
     # read files from disk
+    start = time.time()
     files = readFiles("files/")
 
     # run preprocessing on files and save result on disk in data/data.json
@@ -48,16 +74,19 @@ def main():
     indexer("data/auxiliary table.json", data)
 
     # load the auxliliary from disk
-    auxliliary_table = loadFromDisk("data/auxiliary table.json")
+    auxiliary_table = loadFromDisk("data/auxiliary table.json")
 
-    start = time.time()
+    # print auxliliary table for every term
+    getTableForTerms(list_query)
 
     # pass the phrase query which enterd by user and auxlliary table to the phrasequery to get result
-    result = phraseQuery(auxliliary_table, list_query)
-
+    # start = time.time()
+    result = phraseQuery(auxiliary_table, list_query)
     end = time.time()
 
-    print(result)
+    print(query, "in", len(result), "documents", "with", getTermFreq(result), "times")
+    printTable(result)
+
     print("Time taken is: ", (end - start))
 
 
