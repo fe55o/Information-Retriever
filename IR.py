@@ -1,9 +1,10 @@
-from os import terminal_size
+import os
 from ReadFiles import readFiles
 from PreProcessing import preProcessing
 from Indexer import indexer
 from PhraseQuery import phraseQuery
 from QueryPreProcessing import prepareQuery
+from VectorSpaceModel import run
 import json
 import time
 import math
@@ -51,7 +52,7 @@ def getTermFreq(table):
     return sum
 
 
-def printResult(query, result, time, df, tf, idf):
+def printResult(query, result, time, df, tf):
     print(
         "-------------------------------------------------------------------------------------------------------------------------------------------------"
     )
@@ -61,17 +62,22 @@ def printResult(query, result, time, df, tf, idf):
     )
     printTable(result)
 
-    print("idf : ", idf)
     print("Time taken is: ", time)
 
 
-def calcIDF(total_num_of_doc, df):
-    return math.log(total_num_of_doc / df, 10)
+def getfilesIDS(path):
+    files = []
+    for file in os.listdir(path):
+        files.append(file)
+    return files
 
 
 def main():
     global auxiliary_table
     query = readQueryFromUser()
+
+    path = "files/"
+    files_ids = getfilesIDS(path)
 
     # prepare query, stop words removal, normalization, ...etc
     list_query = prepareQuery(query)
@@ -81,10 +87,10 @@ def main():
 
     # read files from disk
     start = time.time()
-    files = readFiles("files/")
+    files = readFiles(path)
 
     # run preprocessing on files and save result on disk in data/data.json
-    data = preProcessing(files)
+    data = preProcessing(files_ids, files)
     saveOnDisk("data/data.json", data)
 
     # load the tokens and result from data.json file
@@ -97,6 +103,7 @@ def main():
     auxiliary_table = loadFromDisk("data/auxiliary table.json")
 
     # print auxliliary table for every term
+    print("\n")
     getTableForTerms(list_query)
 
     # pass the phrase query which enterd by user and auxlliary table to the phrasequery to get result
@@ -106,9 +113,12 @@ def main():
 
     term_frequency = getTermFreq(result)
     doc_frequency = len(result)
-    idf = calcIDF(10, doc_frequency)
 
-    printResult(query, result, end - start, doc_frequency, term_frequency, idf)
+    printResult(query, result, end - start, doc_frequency, term_frequency)
+
+    run(files_ids, list_query, auxiliary_table, len(files_ids))
+
+    # print(files_ids)
 
 
 if __name__ == "__main__":
