@@ -21,6 +21,7 @@ def readPdf(pdf):
     return result
 
 
+# ["files/doc_names"]
 def readMultiplePdfFiles(list_files):
     result = []
     for file in list_files:

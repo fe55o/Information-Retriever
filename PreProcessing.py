@@ -31,6 +31,7 @@ def givePositions(files):
             if len(files[i][j]) != 0:
                 pos += 1
             files[i][j] = [files[i][j], pos]
+        pos = 0
     return files
 
 

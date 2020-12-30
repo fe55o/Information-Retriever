@@ -87,17 +87,17 @@ def main():
 
     # read files from disk
     start = time.time()
-    files = readFiles(path)
+    # files = readFiles(path)
 
     # run preprocessing on files and save result on disk in data/data.json
-    data = preProcessing(files_ids, files)
-    saveOnDisk("data/data.json", data)
+    # data = preProcessing(files_ids, files)
+    # saveOnDisk("data/data.json", data)
 
     # load the tokens and result from data.json file
-    data = loadFromDisk("data/data.json")
+    # data = loadFromDisk("data/data.json")
 
     # pass the result to Indexer to create the auxiliary table and save it on disk
-    indexer("data/auxiliary table.json", data)
+    # indexer("data/auxiliary table.json", data)
 
     # load the auxliliary from disk
     auxiliary_table = loadFromDisk("data/auxiliary table.json")

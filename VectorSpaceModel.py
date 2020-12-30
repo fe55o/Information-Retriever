@@ -71,14 +71,13 @@ def getTableForQuery(n):
     result = []
     i = 0
     for token in query:
+        tf = query.count(token)
         try:
             df = len(table[token])
-            tf = query.count(token)
             tf_weight = calcTFWeight(tf)
             idf = calcIDF(n, df)
             tf_idf = calcTFIDF(tf_weight, idf)
         except:
-            tf = 0
             df = 0
             tf_weight = 0
             idf = 0
